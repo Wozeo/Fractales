@@ -134,12 +134,17 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
   }
 }
 
+int pp = 0;
 
 void dessin() {
 
   if (x <= width+1) {
-
-    println(x*100/width);
+    int pa = int(x*100/width);
+    if(pa > pp){
+      println(pa);
+      pp = pa;
+    }
+   // println(x*100/width);
 
     for (float y = 0; y < height+1; y += resolution) {
       float tX = (x-Xcentre);
@@ -206,7 +211,7 @@ void mousePressed() {
 
 void keyPressed() {
   if (HUD) {
-
+    pp = 0;
     switch(keyCode) {
       case(73)://I
       x = 0;
@@ -374,7 +379,7 @@ void keyPressed() {
 
 
   if (keyCode == 87) {//W
-    saveFrame("Fractale-"+int(random(0, 10000))+"-"+int(parametres[0][0])+int(parametres[0][1])+int(parametres[1][0])+int(parametres[1][1])+int(parametres[2][0])+int(parametres[2][1])+int(parametres[2][2])+int(parametres[3][0])+int(parametres[3][1])+int(parametres[3][2])+int(parametres[4][0])+int(parametres[4][1])+".png");
+    saveFrame("Fractale-"+int(random(10000, 99999))+"-"+str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*100))+","+str(int(parametres[4][1]*100))+".png");
     println("Sauvegarde");
   }
 
