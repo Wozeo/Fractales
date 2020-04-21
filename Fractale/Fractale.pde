@@ -32,8 +32,8 @@ String commandes[][] = {{"Gauche", "Deplace la caméra"},
 //Parametres de fractale
 float parametres[][] = {{2, 2}, // Re((zn)^)
   {1, 1}, // Re((zn))^
-  {1, 1, 1}, // Re(c)^
-  {1, 2, 0}, // Re(c^)
+  {1, 1, 0}, // Re(c)^
+  {1, 1, 1}, // Re(c^)
   {0, 0}, //z0
 };
 boolean Mandel = true;
@@ -47,7 +47,8 @@ float resolution = 10;
 float IntMin = 0;
 int iteLimite = 100+int(IntMin);
 float maxContraste = 50;
-boolean couleurs = false;
+int nCoul = 3;
+int couleurs = 0;
 int Xcentre, Ycentre;
 
 
@@ -65,6 +66,7 @@ boolean menuCommande = false;
 
 void setup() {
   fullScreen();
+  //size(7680,4320);
   Xcentre = int(width*0.5);
   Ycentre = int(height*0.5);
   dessin();
@@ -140,11 +142,11 @@ void dessin() {
 
   if (x <= width+1) {
     int pa = int(x*100/width);
-    if(pa > pp){
+    if (pa > pp) {
       println(pa);
       pp = pa;
     }
-   // println(x*100/width);
+    // println(x*100/width);
 
     for (float y = 0; y < height+1; y += resolution) {
       float tX = (x-Xcentre);
@@ -163,20 +165,27 @@ void dessin() {
       }
       float ni = s;
       noStroke();
-      if (couleurs) {
+      if (couleurs > 0) {
+
         float ro = 0, ve = 0, bl = 0;
-        if (ni <= iteLimite/2) {
-          ro = 255;
-          ve = (iteLimite/2-ni)*255/(iteLimite/2);
-          bl = 0;
-        } else if (ni > iteLimite/2 && ni <= iteLimite) {
-          ro = iteLimite-ni;
-          ve = 0;
-          bl = ni - iteLimite/2;
+        if (couleurs > 1) {
+          if (ni <= iteLimite/2) {
+            ro = 255;
+            ve = (iteLimite/2-ni)*255/(iteLimite/2);
+            bl = 0;
+          } else if (ni > iteLimite/2 && ni <= iteLimite) {
+            ro = iteLimite-ni;
+            ve = 0;
+            bl = ni - iteLimite/2;
+          } else {
+            ro = 0;
+            ve = 0;
+            bl = 0;
+          }
         } else {
-          ro = 0;
-          ve = 0;
-          bl = 0;
+          ro = 120-120*pow(((ni-IntMin)/iteLimite),25/maxContraste);//0.4
+          ve = 190-190*pow(((ni-IntMin)/iteLimite),25/maxContraste);//*(ni/iteLimite);
+          bl = 220-220*pow(((ni-IntMin)/iteLimite),25/maxContraste);//*(ni/iteLimite);
         }
         fill(color(ro, ve, bl));
         rect(x, y, resolution, resolution);
@@ -216,7 +225,7 @@ void keyPressed() {
       case(73)://I
       x = 0;
       echelle /= 1.1;
-      
+
       break;
 
       case(79)://O
@@ -348,7 +357,9 @@ void keyPressed() {
       break;
 
       case(80)://P
-      couleurs = ! couleurs;
+      //couleurs = ! couleurs;
+      couleurs ++;
+      couleurs = couleurs%nCoul;
       x = 0;
       break;
 
@@ -366,15 +377,12 @@ void keyPressed() {
         }
       }
       break;
-      
     }
-    
   } else {
-    
+
     if (keyCode == 72) {
       HUD = true;
     }
-    
   }
 
 
@@ -388,8 +396,20 @@ void keyPressed() {
     HUD = !menuCommande;
     x = 0;
   }
-  
+  println("----Paramètres----");
+  println(str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*100))+","+str(int(parametres[4][1]*100)));
+  println("Echelle : "+echelle);
+  println("Xcentre : "+Xcentre);
+  println("Ycentre : "+Ycentre);
+  println("Resolution : "+resolution);
+  println("Contraste : "+maxContraste);
+  println("IntMin : "+IntMin);
+  println("Renversement des axes : "+reverseXY);
+  println("Mandelbrot(1) / Julia(0) : "+Mandel);
+  println("Couleurs : "+couleurs);
 }
+
+
 
 float pcR(boolean reel, float r, float i, float rs, float is, float p) {
   if (p <= 1) {
