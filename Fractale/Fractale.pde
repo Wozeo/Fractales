@@ -24,7 +24,8 @@ String commandes[][] = {{"Gauche", "Deplace la caméra"},
   {"E", "Change de parametre"}, 
   {"M", "(z^)+c Modifie si la constante est z ou c"}, 
   {"F", "Echange les axes"}, 
-  {"P", "Couleur"}};
+  {"P", "Couleur"}, 
+  {"Y", "Active/Desactive le mode 360"}};
 
 
 // Parametres
@@ -45,7 +46,7 @@ float resolution = 10;
 
 //Parametres couleur
 float IntMin = 0;
-int iteLimite = 100+int(IntMin);
+int iteLimite = 100+int(IntMin);//100
 float maxContraste = 50;
 int nCoul = 3;
 int couleurs = 0;
@@ -54,7 +55,7 @@ int Xcentre, Ycentre;
 
 //Autre
 float x = 0;
-int seuil = 500;
+int seuil = 500;//500
 String nomPara[] = {"Re((zn)^)", "Re((zn))^", "Re(c)^", "Re(c^)", "z0"};
 int cd = 10;
 boolean HUD = false;
@@ -62,11 +63,11 @@ int paraIndice = 0;
 int paraIindice = 0;
 float oriDepl = 0.05;
 boolean menuCommande = false;
-
+boolean tcs = false;
 
 void setup() {
   fullScreen();
-  //size(7680,4320);
+  //size(5940, 3240);
   Xcentre = int(width*0.5);
   Ycentre = int(height*0.5);
   dessin();
@@ -97,7 +98,8 @@ void draw() {
     text(nomPara[paraIndice], width/1000, height/3.1);
     for (int i = 0; i < parametres[paraIndice].length; i ++) {
       if (paraIndice == 4) {
-        text( nf(parametres[paraIndice][i], 0, 2), width/1000+i*2*height/20, height/2.7);
+        textSize(height/30);
+        text( nf(parametres[paraIndice][i], 0, 3), width/1000+i*2*height/20, height/2.7);
       } else {
         text(int(parametres[paraIndice][i]), width/1000+i*2*height/25, height/2.7);
       }
@@ -114,6 +116,24 @@ void draw() {
       text(commandes[i][0]+" : "+commandes[i][1], width/1000, (i+1)*height/(commandes.length+1));
     }
   }
+  
+  if(tcs && x > width+1){
+    String num = str(int(10*angle*180/PI));
+    while(num.length() < 4){
+      num = "0"+num;
+    }
+    saveFrame("Fractale--"+str(int(parametres[0][0]))+"-"+str(int(parametres[0][1]))+"-"+str(int(parametres[1][0]))+"-"+str(int(parametres[1][1]))+"-"+str(int(parametres[2][0]))+"-"+str(int(parametres[2][1]))+"-"+str(int(parametres[2][2]))+"-"+str(int(parametres[3][0]))+"-"+str(int(parametres[3][1]))+"-"+str(int(parametres[3][2]))+"-"+str(int(normetcs*1000))+"/"+num+".png");
+    x = 0;
+    pp = 0;
+    angle += 0.1*da;
+    parametres[4][0] = normetcs*cos(angle);
+    parametres[4][1] = normetcs*sin(angle);
+    if(angle > 2*PI){
+      tcs = false;
+      HUD = true;
+    }
+    println("360------------------------"+str(100*angle*180/(PI*360))+"prc--"+str(int(normetcs*1000))+"-"+num+"----------------------------------------");
+  }
 }
 
 
@@ -129,7 +149,7 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
     +parametres[2][2]*pow(ci, parametres[2][1])
     +parametres[3][2]*pcR(false, cr, ci, cr, ci, parametres[3][1]);
 
-  if ( (r*r+i*i) > pow(seuil, 2) || ite > iteLimite) {
+  if ( (r*r+i*i) > pow(seuil, 2) || ite > iteLimite+IntMin) {
     return (ite+1);
   } else {
     return (suite(r, i, seuil, ite+1, cr, ci));
@@ -139,7 +159,6 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
 int pp = 0;
 
 void dessin() {
-
   if (x <= width+1) {
     int pa = int(x*100/width);
     if (pa > pp) {
@@ -183,9 +202,9 @@ void dessin() {
             bl = 0;
           }
         } else {
-          ro = 120-120*pow(((ni-IntMin)/iteLimite),25/maxContraste);//0.4
-          ve = 190-190*pow(((ni-IntMin)/iteLimite),25/maxContraste);//*(ni/iteLimite);
-          bl = 220-220*pow(((ni-IntMin)/iteLimite),25/maxContraste);//*(ni/iteLimite);
+          ro = 120-120*pow(((ni-IntMin)/iteLimite), 25/maxContraste);//0.4
+          ve = 190-190*pow(((ni-IntMin)/iteLimite), 25/maxContraste);//*(ni/iteLimite);
+          bl = 220-220*pow(((ni-IntMin)/iteLimite), 25/maxContraste);//*(ni/iteLimite);
         }
         fill(color(ro, ve, bl));
         rect(x, y, resolution, resolution);
@@ -301,6 +320,7 @@ void keyPressed() {
 
       case(70)://F
       reverseXY = !reverseXY;
+      x = 0;
       break;
 
       case(90)://Z
@@ -348,10 +368,10 @@ void keyPressed() {
 
       case(77)://M
       Mandel = !Mandel;
-      if (oriDepl == 0.01) {
+      if (oriDepl == 0.001) {
         oriDepl = 0.05;
       } else {
-        oriDepl = 0.01;
+        oriDepl = 0.001;
       }
       x = 0;
       break;
@@ -377,6 +397,22 @@ void keyPressed() {
         }
       }
       break;
+      
+      case(89)://Y
+      
+      float zox = parametres[4][0];
+      float zoy = parametres[4][1];
+      float norme = sqrt(zox*zox+zoy*zoy);
+      if(norme > 0){
+        tcs = !tcs;
+        normetcs = norme;
+        angle = 0;
+        x = 0;
+        parametres[4][0] = norme;
+        parametres[4][1] = 0;
+        HUD = false;
+      }
+      break;
     }
   } else {
 
@@ -384,6 +420,7 @@ void keyPressed() {
       HUD = true;
     }
   }
+  println(keyCode);
 
 
   if (keyCode == 87) {//W
@@ -397,7 +434,7 @@ void keyPressed() {
     x = 0;
   }
   println("----Paramètres----");
-  println(str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*100))+","+str(int(parametres[4][1]*100)));
+  println(str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*1000))+","+str(int(parametres[4][1]*1000)));
   println("Echelle : "+echelle);
   println("Xcentre : "+Xcentre);
   println("Ycentre : "+Ycentre);
@@ -409,7 +446,9 @@ void keyPressed() {
   println("Couleurs : "+couleurs);
 }
 
-
+float normetcs = 0;
+float angle = 0;
+float da = PI/180.0;
 
 float pcR(boolean reel, float r, float i, float rs, float is, float p) {
   if (p <= 1) {
