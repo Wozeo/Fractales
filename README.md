@@ -6,4 +6,6 @@ Il s'agit d'un générateur de fractale (ensemble de Mandelbrot ou ensemble de J
 ![Fractale](Resultats/Fractale-8820-221111112000110.png)
 ![Fractale](Resultats/Fractale-1547-2611131121110.png)
 
+https://www.youtube.com/watch?v=-rliRuDWjWU
+
 Processing : https://processing.org/
