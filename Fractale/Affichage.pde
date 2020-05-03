@@ -47,6 +47,8 @@ void draw() {
 
   if (tcs && x > width+1) {
     tcs();
+  }else if(lin && x > width+1){
+    lin();
   }
 }
 
@@ -54,7 +56,8 @@ void dessin() {
   if (x <= width+1) {
     int pa = int(x*100/width);
     if (pa > pp) {
-      println(pa);
+      print(pa);
+      print(" ; ");
       pp = pa;
     }
     // println(x*100/width);
