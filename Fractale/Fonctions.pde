@@ -50,6 +50,18 @@ float chCpl(boolean reel,float r,float i){
   }
 }
 
+float factorielle(int k){
+  if(k <= 1){
+    return 1;
+  }else{
+    float r = 1;
+    for(int i = 1; i <= k; i ++){
+      r *= i;
+    }
+    return r;
+  }
+}
+
 
 float pcR(boolean reel, float r, float i, float rs, float is, float p) {
   if (p == 1) {
