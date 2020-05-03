@@ -85,6 +85,7 @@ void keyPressed() {
 
       case(66)://B
       IntMin += 1;
+      
       x = 0;
       break;
 
@@ -195,6 +196,18 @@ void keyPressed() {
         HUD = false;
       }
       break;
+      
+      case(85):
+      lin = !lin;
+      HUD = false;
+      x = 0;
+      xDep = 0; 
+      yDep = 0;
+      xAr = parametres[4][0];
+      yAr = parametres[4][1];
+      parametres[4][0] = xDep;
+      parametres[4][1] = xAr;
+      break;
     }
   } else {
 
@@ -206,7 +219,7 @@ void keyPressed() {
 
 
   if (keyCode == 87) {//W
-    saveFrame("Fractale-"+int(random(10000, 99999))+"-"+str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*100))+","+str(int(parametres[4][1]*100))+".png");
+    saveFrame("Fractale-"+int(random(10000, 99999))+"-"+str(int(parametres[0][0]))+","+str(int(parametres[0][1]))+","+str(int(parametres[1][0]))+","+str(int(parametres[1][1]))+","+str(int(parametres[2][0]))+","+str(int(parametres[2][1]))+","+str(int(parametres[2][2]))+","+str(int(parametres[3][0]))+","+str(int(parametres[3][1]))+","+str(int(parametres[3][2]))+","+str(int(parametres[4][0]*100))+","+str(int(parametres[4][1]*100))+","+str(int(parametres[5][0]))+".png");
     println("Sauvegarde");
   }
 
