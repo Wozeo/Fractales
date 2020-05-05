@@ -1,0 +1,9 @@
+1 : c+sommme(k de 2 à n de (-1)^k * x^k
+2 : cos(z)+1/c
+3 : sinh(c^kp) + z^2
+4 : sin(z)+1/c
+5 : cosh(c^kp) + z^2
+6 : "Burning Ship" (abs(re(z))+iabs(im(z)))²+c
+7 : ch(z)^p + c
+8 : c+sommme(k de 2 à n de (-1)^k * x^k / k 
+9 : c+sommme(k de 2 à n de (-1)^k * x^k / k! 
