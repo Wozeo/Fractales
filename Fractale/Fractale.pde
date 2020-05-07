@@ -125,16 +125,44 @@ void lin(){
 }
 
 
-float suite(float r, float i, float seuil, float ite, float cr, float ci) {
+float suiteRecursive(float r, float i, float seuil, float ite, float cr, float ci) {
 
+
+  float vs[] = suite(r,i,cr,ci);
+  r = vs[0];
+  i = vs[1];
+
+  if ( (r*r+i*i) > pow(seuil, 2) || ite > iteLimite+IntMin) {
+    return (ite+1);
+  } else {
+    return (suiteRecursive(r, i, seuil, ite+1, cr, ci));
+  }
+}
+
+int suiteIterative(float r, float i, float seuil, float cr, float ci){
+  
+  int ite = 0;
+  while(r*r+i*i < seuil*seuil && ite < iteLimite+IntMin){
+    float vs[] = suite(r,i,cr,ci);
+    r = vs[0];
+    i = vs[1];
+    ite ++;
+  }
+  
+  return ite;
+}
+
+
+
+int pp = 0;
+float normetcs = 0;
+float angle = 0;
+float da = PI/180.0;
+
+
+float [] suite(float r,float i,float cr,float ci){
   float rInt = r;
   float iInt = i;
-
-
-
-  /*Type1*/
-
-
   switch(int(parametres[5][0])) {
 
 
@@ -159,7 +187,8 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
 
     case(2)://Type 2
     if (cr == 0 && ci == 0) {
-      return ite+1;
+      float []renv = {seuil,seuil};
+      return renv;
     }
     float cpr = pcR(true, cr, ci, cr, ci, int(parametres[1][0]));
     float cpi = pcR(false, cr, ci, cr, ci, int(parametres[1][1]));
@@ -174,7 +203,8 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
 
     case(3)://Type 3
     if (cr == 0 && ci == 0) {
-      return ite+1;
+      float []renv = {seuil,seuil};
+      return renv;
     }
     cpr = pcR(true, cr, ci, cr, ci, int(parametres[1][0]));
     cpi = pcR(false, cr, ci, cr, ci, int(parametres[1][1]));
@@ -187,7 +217,8 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
 
     case(4)://Type 4
     if (cr == 0 && ci == 0) {
-      return ite+1;
+      float []renv = {seuil,seuil};
+      return renv;
     }
     cpr = pcR(true, cr, ci, cr, ci, int(parametres[0][0]));
     cpi = pcR(false, cr, ci, cr, ci, int(parametres[0][1]));
@@ -199,7 +230,8 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
 
     case(5)://Type 5
     if (cr == 0 && ci == 0) {
-      return ite+1;
+      float []renv = {seuil,seuil};
+      return renv;
     }
     cpr = pcR(true, cr, ci, cr, ci, int(parametres[1][0]));
     cpi = pcR(false, cr, ci, cr, ci, int(parametres[1][1]));
@@ -295,6 +327,15 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
       }
     }
     break;
+    
+    case(13):
+    r = cr;
+    i = ci;
+    for(int k = 1; k < parametres[0][0] ; k ++){
+      r += pow(-1,k+1)*pcR(true,rInt,iInt,rInt,iInt,k)/k;
+      i += pow(-1,k+1)*pcR(false,rInt,iInt,rInt,iInt,k)/k;
+    }
+    break;
 
     case(0):
     r = pow(pcR(true, rInt, iInt, rInt, iInt, parametres[0][0]), parametres[1][0])
@@ -305,21 +346,6 @@ float suite(float r, float i, float seuil, float ite, float cr, float ci) {
       +parametres[3][2]*pcR(false, cr, ci, cr, ci, parametres[3][1]);
     break;
   }
-
-
-
-
-
-  if ( (r*r+i*i) > pow(seuil, 2) || ite > iteLimite+IntMin) {
-    return (ite+1);
-  } else {
-    return (suite(r, i, seuil, ite+1, cr, ci));
-  }
+  float ren[] = {r,i};
+  return ren;
 }
-
-
-
-int pp = 0;
-float normetcs = 0;
-float angle = 0;
-float da = PI/180.0;

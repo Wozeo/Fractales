@@ -73,9 +73,11 @@ void dessin() {
       float i = tY*echelle;
       float s;
       if (Mandel) {
-        s = suite(parametres[4][0], parametres[4][1], seuil, 0, r, i);
+        //s = suiteRecursive(parametres[4][0], parametres[4][1], seuil, 0, r, i);
+        s = suiteIterative(parametres[4][0], parametres[4][1], seuil, r, i);  
       } else {
-        s = suite(r, i, seuil, 0, parametres[4][0], parametres[4][1]);
+        //s = suiteRecursive(r, i, seuil, 0, parametres[4][0], parametres[4][1]);
+        s = suiteIterative(r, i, seuil, parametres[4][0], parametres[4][1]);
       }
       float ni = s;
       noStroke();
